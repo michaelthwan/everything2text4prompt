@@ -1,6 +1,10 @@
+import re
+
+import openai
 import requests
-import io
 from youtube_transcript_api import YouTubeTranscriptApi
+
+openai.api_key = ""
 
 
 class Everything2Text4Prompt:
@@ -44,12 +48,20 @@ class Everything2Text4Prompt:
         return text, True, "Success"
 
     def convert_podcast_transcript(self, podcast_url):
-        # You will need to add the logic to fetch and convert podcast transcripts
-        # based on a specific podcast URL, or consider using a Podcast Transcript API
-        raise NotImplementedError("Podcast transcript conversion is not implemented yet")
-        response = requests.get(podcast_url)
-        transcript = response.text
-        return transcript
+        def download_mp3(url, file_name):
+            with open(file_name, "wb") as file:
+                response = requests.get(url)
+                file.write(response.content)
+
+        content = requests.get(podcast_url)
+        mp3_url = re.findall("(?P<url>\;https?://[^\s]+)", content.text)[0].split(';')[1]
+        print(f"mp3_url: {mp3_url}")
+        download_mp3(mp3_url, "temp.mp3")
+        print(f"Downloaded mp3 file")
+        file = open("temp.mp3", "rb")
+        print(f"Calling openai whisper-1")
+        transcript = openai.Audio.transcribe("whisper-1", file)
+        return transcript, True, "Success"
 
     def convert_pdf_to_text(self, pdf_file):
         raise NotImplementedError("PDF to text conversion is not implemented yet")
@@ -79,6 +91,6 @@ if __name__ == "__main__":
     # 通用人工智能离我们多远，大模型专家访谈 ｜S7E11 硅谷徐老师 x OnBoard！
     target_source = "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5maXJlc2lkZS5mbS9ndWlndXphb3poaWRhby9yc3M/episode/YzIxOWI4ZjktNTZiZi00NGQ3LTg3NjctYWZiNTQzOWZjMTNk?sa=X&ved=0CAUQkfYCahcKEwjwp9icjv_-AhUAAAAAHQAAAAAQLA&hl=zh-TW"
 
-    youtube_transcript, is_success, error_msg = converter.convert_youtube_transcript(target_source)
-    print(youtube_transcript)
+    transcript, is_success, error_msg = converter.convert_text(medium, target_source)
+    print(transcript)
     print(is_success, error_msg)
