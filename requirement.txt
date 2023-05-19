@@ -1,3 +1,9 @@
-youtube-transcript-api==0.6.0
-pypdf==3.8.1
+# general
 openai==0.27.6
+# youtube
+youtube-transcript-api==0.6.0
+# podcast
+# ffmpeg-python==0.2.0
+# pydub==0.25.1
+# pdf
+pypdf==3.8.1
