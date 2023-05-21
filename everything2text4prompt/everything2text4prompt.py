@@ -4,14 +4,14 @@ import openai
 import requests
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from util import chunk_mp3
-
-openai.api_key = ""
+from .util import chunk_mp3
 
 
 class Everything2Text4Prompt:
-    def __init__(self):
-        pass
+    def __init__(self, openai_api_key, is_azure=False):
+        self.openai_api_key = openai_api_key
+        self.is_azure = is_azure
+        openai.api_key = self.openai_api_key
 
     def convert_text(self, medium, target_source) -> (str, bool, str):
         if medium == "youtube":
@@ -71,37 +71,35 @@ class Everything2Text4Prompt:
         print(transcript_list)
         return " ".join(transcript_list), True, "Success"
 
-
-def convert_pdf_to_text(self, pdf_file):
-    raise NotImplementedError("PDF to text conversion is not implemented yet")
-
-
-#     with open(pdf_file, 'wb') as file:
-#         file.write(pdf_file)
-#
-#     reader = PdfReader(pdf_file)
-#     text = []
-#
-#     for page in reader.pages:
-#         text.append(page.extract_text())
-#
-#     return "\n".join(text)
+    def convert_pdf_to_text(self, target_source):
+        raise NotImplementedError("PDF to text conversion is not implemented yet")
+        # with open(pdf_file, 'wb') as file:
+        #     file.write(pdf_file)
+        #
+        # reader = PdfReader(pdf_file)
+        # text = []
+        #
+        # for page in reader.pages:
+        #     text.append(page.extract_text())
+        #
+        # return "\n".join(text)
 
 
 if __name__ == "__main__":
-    converter = Everything2Text4Prompt()
+    openai_api_key = ""
+    converter = Everything2Text4Prompt(openai_api_key)
 
-    # medium = "youtube"
+    medium = "youtube"
     # target_source = "8S0FDjFBj8o"  # Default English
-    # target_source = "lSTEhG021Jc"  # Default auto-generated English
+    target_source = "lSTEhG021Jc"  # Default auto-generated English
     # target_source = "https://www.youtube.com/watch?v=lSTEhG021Jc&ab_channel=EddieGM"  # Test the handling if people input URL
     # target_source = "https://www.youtube.com/watch?v=29WGNfuxIxc&ab_channel=PanSci%E6%B3%9B%E7%A7%91%E5%AD%B8"  # Default Chinese
     # target_source = "https://www.youtube.com/watch?v=K0SZ9mdygTw&t=757s&ab_channel=MuLi"  # Subtitle not available
 
-    medium = "podcast"
+    # medium = "podcast"
     # Short english
     # Moment 108 - This Powerful Tool Can Change Your Life: Africa Brooke
-    target_source = "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8xNzE3MDMucnNz/episode/NWQzYmJlZDktNzA1Mi00NzU5LThjODctMzljMmIxNmJjZDM3?sa=X&ved=0CAUQkfYCahcKEwig_fW00YH_AhUAAAAAHQAAAAAQLA"
+    # target_source = "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8xNzE3MDMucnNz/episode/NWQzYmJlZDktNzA1Mi00NzU5LThjODctMzljMmIxNmJjZDM3?sa=X&ved=0CAUQkfYCahcKEwig_fW00YH_AhUAAAAAHQAAAAAQLA"
 
     # Long Chinese
     # TODO: Not sure why it is not working after chunking
