@@ -1,6 +1,32 @@
 import os
 
 
+class BaseData:
+    def __init__(self, full_content):
+        self.full_content = full_content
+
+    def shorten_text(self, text: str) -> str:
+        if text is None or len(text) < 120:
+            return text
+        return text[:50] + " ... " + text[-50:]
+
+
+class YoutubeData(BaseData):
+    def __init__(self, transcript, title, description):
+        super().__init__(transcript)
+        self.title = title
+        self.description = description
+        self.shorten_transcript = self.shorten_text(transcript)
+
+
+class PodcastData(BaseData):
+    def __init__(self, transcript, title, description):
+        super().__init__(transcript)
+        self.title = title
+        self.description = description
+        self.shorten_transcript = self.shorten_text(transcript)
+
+
 def chunk_mp3(file_path: str) -> list:
     chunk_size = 20 * 1024 * 1024  # 20MB
 
