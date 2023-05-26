@@ -1,8 +1,8 @@
 import openai
 
-from pdf_util import get_pdf_data
-# from podcast_util import convert_podcast_transcript
-from youtube_util import get_youtube_data
+from .pdf_util import PDFUtil
+# from .podcast_util import convert_podcast_transcript
+from .youtube_util import YoutubeUtil
 
 
 class Everything2Text4Prompt:
@@ -13,11 +13,11 @@ class Everything2Text4Prompt:
 
     def convert_text(self, medium, target_source) -> (str, bool, str):
         if medium == "youtube":
-            return get_youtube_data(target_source)
+            return YoutubeUtil.get_youtube_data(target_source)
         # elif medium == "podcast":
         #     return convert_podcast_transcript(target_source)
         elif medium == "pdf":
-            return get_pdf_data(target_source)
+            return PDFUtil.get_pdf_data(target_source)
         else:
             raise Exception("Unsupported medium")
 
