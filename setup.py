@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="everything2text4prompt",
-    version="0.0.5",
+    version="0.0.6",
     description="Convert many medium into text, and the text format is specialized for prompt input",
     # package_dir={'': 'everything2text4prompt'},
     packages=find_packages(),

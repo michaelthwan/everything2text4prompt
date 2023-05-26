@@ -2,6 +2,7 @@
 openai==0.27.6
 # youtube
 youtube-transcript-api==0.6.0
+bs4
 # podcast
 # ffmpeg-python==0.2.0
 # pydub==0.25.1
