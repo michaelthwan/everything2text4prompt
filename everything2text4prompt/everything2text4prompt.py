@@ -47,3 +47,4 @@ if __name__ == "__main__":
     data, is_success, error_msg = converter.convert_text(medium, target_source)
     print(data.shorten_transcript)
     print(is_success, error_msg)
+    # print(data.ts_transcript_list)

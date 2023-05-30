@@ -12,19 +12,21 @@ class BaseData:
 
 
 class YoutubeData(BaseData):
-    def __init__(self, transcript, title, description):
+    def __init__(self, transcript, title, description, ts_transcript_list):
         super().__init__(transcript)
         self.title = title
         self.description = description
         self.shorten_transcript = self.shorten_text(transcript)
+        self.ts_transcript_list = ts_transcript_list
 
 
 class PodcastData(BaseData):
-    def __init__(self, transcript, title, description):
+    def __init__(self, transcript, title, description, ts_transcript_list):
         super().__init__(transcript)
         self.title = title
         self.description = description
         self.shorten_transcript = self.shorten_text(transcript)
+        self.ts_transcript_list = ts_transcript_list
 
 
 def chunk_mp3(file_path: str) -> list:

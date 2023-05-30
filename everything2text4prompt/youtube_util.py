@@ -8,13 +8,13 @@ from .util import YoutubeData
 class YoutubeUtil:
     @staticmethod
     def get_youtube_data(target_source: str) -> (str, bool, str):
-        transcript = title = description = None
+        transcript = title = description = ts_transcript_list = None
         try:
             title, description = YoutubeUtil.get_video_info(target_source)
-            transcript = YoutubeUtil.convert_youtube_transcript(target_source)
+            transcript, ts_transcript_list = YoutubeUtil.convert_youtube_transcript(target_source)
         except Exception as e:
-            return YoutubeData(transcript, title, description), False, str(e)
-        return YoutubeData(transcript, title, description), True, ""
+            return YoutubeData(transcript, title, description, ts_transcript_list), False, str(e)
+        return YoutubeData(transcript, title, description, ts_transcript_list), True, ""
 
     @staticmethod
     def get_video_info(target_source):
@@ -32,12 +32,28 @@ class YoutubeUtil:
         return title, description
 
     @staticmethod
-    def convert_youtube_transcript(target_source) -> str:
+    def convert_youtube_transcript(target_source) -> (str, list):
         def extract_video_id_from_url(url):
             return url.split("v=")[1]
 
         def is_url(url):
             return "youtube.com" in url
+
+        def merge_transcript(transcript):
+            ts_transcript_list = []
+
+            current_start = transcript[0]['start']
+            current_text = transcript[0]['text']
+            for i in range(1, len(transcript)):
+                if transcript[i]['start'] - current_start >= 30:
+                    ts_transcript_list.append({'text': current_text, 'start': current_start})
+                    current_start = transcript[i]['start']
+                    current_text = transcript[i]['text']
+                else:
+                    current_text += ' ' + transcript[i]['text']
+
+            ts_transcript_list.append({'text': current_text, 'start': current_start})
+            return ts_transcript_list
 
         if is_url(target_source):
             video_id = extract_video_id_from_url(target_source)
@@ -54,8 +70,9 @@ class YoutubeUtil:
             transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)
             transcript = transcript_list.find_generated_transcript(preferred_lang)
         text = " ".join([entry['text'] for entry in transcript])
+        merged_transcript = merge_transcript(transcript)
 
-        return text
+        return text, merged_transcript
 
 
 if __name__ == '__main__':
@@ -65,3 +82,9 @@ if __name__ == '__main__':
     print(youtube_data.title)
     print(youtube_data.description)
     print(youtube_data.shorten_transcript)
+
+    print("Transcript with timestamp:")
+    # for entry in youtube_data.ts_transcript_list:
+    #     print(f"{int(entry['start'] // 60)}:{int(entry['start'] % 60):02d} {entry['text'][:50]}")
+    for entry in youtube_data.ts_transcript_list:
+        print(f"{int(entry['start'] // 60)}:{int(entry['start'] % 60):02d} {entry['text']}")
