@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from util import YoutubeData
+from .util import YoutubeData
 from urllib.parse import parse_qs
 
 
