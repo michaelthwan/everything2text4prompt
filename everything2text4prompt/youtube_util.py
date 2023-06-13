@@ -2,7 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 from youtube_transcript_api import YouTubeTranscriptApi
 
-from .util import YoutubeData
+from util import YoutubeData
+from urllib.parse import parse_qs
 
 
 class YoutubeUtil:
@@ -10,11 +11,26 @@ class YoutubeUtil:
     def get_youtube_data(target_source: str) -> (str, bool, str):
         transcript = title = description = ts_transcript_list = None
         try:
-            title, description = YoutubeUtil.get_video_info(target_source)
-            transcript, ts_transcript_list = YoutubeUtil.convert_youtube_transcript(target_source)
+            video_id = YoutubeUtil.parse_video_id(target_source)
+            title, description = YoutubeUtil.get_video_info(video_id)
+            transcript, ts_transcript_list = YoutubeUtil.convert_youtube_transcript(video_id)
         except Exception as e:
             return YoutubeData(transcript, title, description, ts_transcript_list), False, str(e)
         return YoutubeData(transcript, title, description, ts_transcript_list), True, ""
+
+    @staticmethod
+    def is_url(url):
+        return "youtube.com" in url
+
+    @staticmethod
+    def parse_video_id(target_source):
+        if YoutubeUtil.is_url(target_source):
+            # e.g. https://www.youtube.com/watch?v=lSTEhG021Jc&ab_channel=EddieGM -> lSTEhG021Jc
+            query = parse_qs(target_source.split('?', 1)[1])
+            return query["v"][0]
+        if len(target_source) == 11:
+            return target_source
+        raise Exception("Invalid youtube video id")
 
     @staticmethod
     def get_video_info(target_source):
@@ -32,13 +48,7 @@ class YoutubeUtil:
         return title, description
 
     @staticmethod
-    def convert_youtube_transcript(target_source) -> (str, list):
-        def extract_video_id_from_url(url):
-            return url.split("v=")[1]
-
-        def is_url(url):
-            return "youtube.com" in url
-
+    def convert_youtube_transcript(video_id) -> (str, list):
         def merge_transcript(transcript):
             ts_transcript_list = []
 
@@ -54,11 +64,6 @@ class YoutubeUtil:
 
             ts_transcript_list.append({'text': current_text, 'start': current_start})
             return ts_transcript_list
-
-        if is_url(target_source):
-            video_id = extract_video_id_from_url(target_source)
-        else:
-            video_id = target_source
 
         preferred_lang = ['en', 'zh', 'zh-HK', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'it', 'de', 'fr',
                           'tr', 'tk', 'lg', 'da', 'eu', 'mi', 'jv', 'eo', 'gl', 'ca', 'nso', 'gu', 'sw', 'ne', 'ny', 'gn', 'be', 'lt', 'ig', 'is', 'hu', 'id', 'hi', 'ky', 'lo', 'ay', 'fy', 'es',

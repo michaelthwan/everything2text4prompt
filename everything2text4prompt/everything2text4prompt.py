@@ -1,8 +1,8 @@
 import openai
 
-from .pdf_util import PDFUtil
+from pdf_util import PDFUtil
 # from .podcast_util import convert_podcast_transcript
-from .youtube_util import YoutubeUtil
+from youtube_util import YoutubeUtil
 
 
 class Everything2Text4Prompt:
