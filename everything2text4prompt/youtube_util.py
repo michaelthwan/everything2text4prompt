@@ -65,7 +65,7 @@ class YoutubeUtil:
             ts_transcript_list.append({'text': current_text, 'start': current_start})
             return ts_transcript_list
 
-        preferred_lang = ['en', 'zh', 'zh-HK', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'it', 'de', 'fr',
+        preferred_lang = ['en', 'zh', 'zh-HK', 'zh-TW', 'zh-CN', 'zh-Hans', 'zh-Hant', 'ja', 'ko', 'it', 'de', 'fr',
                           'tr', 'tk', 'lg', 'da', 'eu', 'mi', 'jv', 'eo', 'gl', 'ca', 'nso', 'gu', 'sw', 'ne', 'ny', 'gn', 'be', 'lt', 'ig', 'is', 'hu', 'id', 'hi', 'ky', 'lo', 'ay', 'fy', 'es',
                           'kri', 'hr', 'kn', 'iw', 'el', 'hy', 'bn', 'la', 'lv', 'ln', 'fa', 'bs', 'pl', 'fi', 'ak', 'am', 'ar', 'az', 'sq', 'as', 'ru', 'bg', 'sd', 'af', 'kk', 'cy', 'co', 'xh', 'yo',
                           'hmn', 'dv', 'sn', 'ee', 'haw', 'ku', 'no', 'pa', 'ka', 'th', 'ta', 'te', 'ht', 'uk', 'uz', 'ur', 'ts', 'zu', 'so', 'mt', 'ms', 'mk', 'mg', 'mr', 'ml', 'km', 'ceb', 'cs',
