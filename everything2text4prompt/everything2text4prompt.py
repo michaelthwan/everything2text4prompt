@@ -27,11 +27,12 @@ if __name__ == "__main__":
     converter = Everything2Text4Prompt(openai_api_key)
 
     medium = "youtube"
-    # target_source = "8S0FDjFBj8o"  # Default English
-    target_source = "lSTEhG021Jc"  # Default auto-generated English
+    target_source = "8S0FDjFBj8o"  # Default English
+    # target_source = "lSTEhG021Jc"  # Default auto-generated English
     # target_source = "https://www.youtube.com/watch?v=lSTEhG021Jc&ab_channel=EddieGM"  # Test the handling if people input URL
     # target_source = "https://www.youtube.com/watch?v=29WGNfuxIxc&ab_channel=PanSci%E6%B3%9B%E7%A7%91%E5%AD%B8"  # Default Chinese
     # target_source = "https://www.youtube.com/watch?v=K0SZ9mdygTw&t=757s&ab_channel=MuLi"  # Subtitle not available
+    # target_source = "https://www.youtube.com/watch?v=MfDlgRtmgpc&ab_channel=%E9%98%BF%E8%B1%ACAhJu" # yue-HK language testing
     # target_source = "a"  # Error
 
     # medium = "podcast"

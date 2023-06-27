@@ -72,7 +72,8 @@ class YoutubeUtil:
                           'sa', 'nl', 'bho', 'su', 'ti', 'sl', 'sk', 'ps', 'fil', 'vi', 'tg', 'st', 'sr', 'or', 'om', 'yi', 'et', 'ga', 'sv', 'pt', 'si', 'ug', 'mn', 'qu', 'ha', 'my', 'rw', 'lb',
                           'sm', 'ro', 'gd', 'tt', ]
         try:
-            transcript = YouTubeTranscriptApi.get_transcript(video_id, preferred_lang)
+            list = YouTubeTranscriptApi.list_transcripts(video_id)
+            transcript = YouTubeTranscriptApi.get_transcript(video_id, [l.language_code for l in list] + preferred_lang)
         except Exception as e:
             import youtube_transcript_api
             if isinstance(e, youtube_transcript_api._errors.TranscriptsDisabled):
